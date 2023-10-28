@@ -58,12 +58,12 @@ article h3 {
     }
 }
 
-.second {
+.antiquewhite {
     background-color: antiquewhite;
 }
 
-.recommends article {
-    background-color: aquamarine;
+.recommends article:hover {
+    background-color: aqua;
 }
 
 article h1 {
