@@ -1,11 +1,63 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Text Analyzer</title>
-</head>
-<body>
-  <div id="content"></div>
-  <script src="popup.js"></script>
-</body>
-</html>
+<!doctype html>
+<html lang="jp">
 
+  <head>
+    <meta charset="UTF-8">
+    <title>"Analyze Terms of Service" Extention</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/destyle.css">
+    <link rel="stylesheet" href="styles/uikit.min.css" />
+    <link rel="stylesheet" href="styles/style.css" />
+
+    <!-- JS -->
+    <script src="styleScript/uikit.min.js"></script>
+    <script src="styleScript/uikit-icons.min.js"></script>
+    <script src="styleScript/jquery-3.5.1.min.js"></script>
+    <script src="popup.js" type="module"></script>
+    <script src="styleScript/c98f0f48a0.js" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    <div class="progress-modal-wrapper">
+      <div class="modal">
+        <h1>in progress...</h1>
+        <div class="spinner"></div>
+      </div>
+    </div>
+
+    <header class="" uk-grid>
+      <div class="red uk-card uk-card-secondary uk-card-body uk-width-expand@*">
+        <h1 class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right
+        uk-text-center uk-width-expand@
+        uk-heading-large ">
+        <i class="fa-solid fa-triangle-exclamation"></i>CAUTION<i class="fa-solid fa-triangle-exclamation"></i>
+        </h1>
+      </div>
+    </header>
+  
+    <main class="uk-background-muted uk-grid-match uk-grid-small uk-grid-divider
+    uk-margin-remove-top">
+      <articles class="uk-width-expand@s uk-width-expand@m cautions">
+      </articles>
+      <articles class="uk-width-expand@s uk-width-expand@m">
+        <article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body" uk-grid>
+          <h2>suggestion</h2>
+          <article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body">
+            <h2>problem<i class="fa-solid fa-plus btn"></i></h2>
+            <p class="detail">reason</p>
+          </article>
+        </article>
+      </articles>
+    </main>
+  
+    <footer class="uk-background-primary" uk-grid>
+      <p class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right
+        uk-text-center uk-width-expand@">
+        Thank you for using our "ATS systems"!
+      </p>
+    </footer>
+
+  </body>
+  
+</html>
