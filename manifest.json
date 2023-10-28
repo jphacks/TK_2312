@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Text Analyzer",
+  "version": "1.4",
+  "description": "Analyze selected text.",
+  "permissions": ["activeTab", "contextMenus"],
+  "icons": {
+    "48": "icon.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type":"module"
+  }
+}
+
