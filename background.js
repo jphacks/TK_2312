@@ -34,7 +34,7 @@ chrome.contextMenus.create({
 
   chrome.contextMenus.onClicked.addListener(function(info, tab) {
     if (info.menuItemId === "jp_riyoukiyaku") {
-      openPopupWithQuestion("以下の利用規約のうち，危ないと思われる条項を抜き出してください．箇条書きでお願いします,", info.selectionText);
+      openPopupWithQuestion("以下の利用規約のプライバシーの面から危険なところとその理由を箇条書きで抜き出してください．箇条書きの形式では，危険な箇所と理由はセットにしてください．以下のように\n\n危険な箇所:hoge hoge hoge\n理由: huga huga huga\n以下つづく,", info.selectionText);
     } else if (info.menuItemId === "en_riyoukiyaku") {
       openPopupWithQuestion("Please provide the text of the terms of use you would like me to translate and extract potentially dangerous clauses from., ", info.selectionText);
     } else if (info.menuItemId === "quickReply") {

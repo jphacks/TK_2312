@@ -38,7 +38,7 @@ if (submitButton) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer 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"
+          "Authorization": "Bearer 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"
         },
         body: JSON.stringify({
           "model": "gpt-3.5-turbo",
@@ -52,10 +52,23 @@ if (submitButton) {
           "max_tokens": 2000
         })
       })
+
       
       .then(response => {
+        console.log('response is received')
         answerTextarea.classList.remove("loading");
         if (response.ok) {
+          const sections = response.split('\n\n');
+          const result = [];
+          sections.forEach(section => {
+            const lines = section.split('\n');
+            if (lines.length >= 2) {
+              const danger = lines[0].replace('危険な箇所: ', '');
+              const reason = lines[1].replace('理由: ', '');
+              result.push({ danger, reason });
+            }
+          });
+          console.log(result);
           return response.json();
         } else {
           throw new Error(response.status);
@@ -79,10 +92,6 @@ if (submitButton) {
           answerTextarea.value = "Sorry, I could not generate a response.";
         }
       })
-      .catch(error => {
-        console.error(`Error ${error.status}: ${error.message}`);
-      })
-      
       .finally(() => {
         // Re-enable the submit button
         submitButton.disabled = false;
