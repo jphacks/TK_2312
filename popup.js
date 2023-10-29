@@ -5,12 +5,15 @@ console.log(getParam('data'));
 console.log(config.apikey)
 
 const searchedClue = getParam('data')
+const url = getParam('URL')
+console.log(url)
 
 const prefixPrompt = '以下の利用規約のプライバシーの面から危険なところとその理由を箇条書きで抜き出してください．箇条書きの形式では，危険な箇所と理由はセットにしてください．以下のように\n\n危険な箇所:hoge hoge hoge\n理由: huga huga huga\n以下つづく'
 const prefixPrompt_similar_service = "以下のサービスのリンクに類似する他のサービスを調査して、その中のいくつかのサービス名を箇条書きで生成してください。\nサービス名以外は必要ないです.\n箇条書きの形式は以下のようにしてください\nサービス名 hoge\nサービス名 hoge,"
 
 hideComponents();
 askGpt();
+askSimilarService();
 
 function getParam(name, url) {
     if (!url) url = window.location.href;
@@ -67,11 +70,8 @@ async function askGpt() {
       })
 }
 
-async function askGpt() {
+async function askSimilarService() {
   console.log('Ask gpt!')
-  fetch("https://api.openai.com/v1/chat/completions",{
-      
-  })
   fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -83,7 +83,7 @@ async function askGpt() {
         "messages": [ 
           {
             "role": "user",
-            "content":  prefixPrompt_similar_service + searchedClue 
+            "content":  prefixPrompt_similar_service + url 
           }
         ],
         "temperature": 0.3,
@@ -93,9 +93,11 @@ async function askGpt() {
     .then(response=>{
       return response.json()
     }).then(data =>{
+      console.log(data)
       const input = data.choices[0].message.content
       const serviceNames = input.match(/サービス名: (\w+)/g).map(match => match.split(": ")[1])
-      showComponents(serviceNames)
+      console.log(serviceNames)
+      showSuggestions(serviceNames)
     }).catch(error => {
       console.log(error)
     })
@@ -108,13 +110,9 @@ function hideComponents() {
 }
 
 function showComponents(result) {
-  const recommends = ["twitter", "instagram", "youtube"];
 
   for (let i=0;i<result.length;i++) {
     $('.cautions').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body click"><h2>' + result[i].danger +'<i class="fa-solid fa-plus btn"></i></h2><h3 class="detail">' + result[i].reason + '</h3></article>');
-  }
-  for (let i=0;i<recommends.length;i++) {
-    $('.recommends').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body recommend"><h2>' + recommends[i] + '</h2></article>');
   }
 
   $('.progress-modal-wrapper').fadeOut();
@@ -146,8 +144,15 @@ function showComponents(result) {
     }
   });
 
+ 
+}
+
+function showSuggestions(recommends) {
+  for (let i=0;i<recommends.length;i++) {
+    $('.recommends').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body recommend"><h2>' + recommends[i] + '</h2></article>');
+  }
   $('.recommend').click(function() {
-      var i = $('.recommend').index($(this));
-      window.open("https://www.google.com/search?q=" + recommends[i]);
-  });
+    var i = $('.recommend').index($(this));
+    window.open("https://www.google.com/search?q=" + recommends[i]);
+});
 }
