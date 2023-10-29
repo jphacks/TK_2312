@@ -5,11 +5,15 @@ console.log(getParam('data'));
 console.log(config.apikey)
 
 const searchedClue = getParam('data')
+const url = getParam('URL')
+console.log(url)
 
-const prefixPrompt = '以下の利用規約のプライバシーの面から危険なところとその理由を箇条書きで抜き出してください．箇条書きの形式では，危険な箇所と理由はセットにしてください．以下のように\n\n危険な箇所:hoge hoge hoge\n理由: huga huga huga\n以下つづく'
+const prefixPrompt = '以下の利用規約のユーザにとって不利になりうるという観点から危険なところとその理由を箇条書きで抜き出してください．箇条書きの形式では，危険な箇所と理由はセットにしてください. 以下のように\n\n危険な箇所:hoge hoge hoge\n理由: huga huga huga\n以下つづく'
+const prefixPrompt_similar_service = "以下のURLのサービスに類似する他のサービスを調査して、その中の3つのサービス名を箇条書きで生成してください。\nサービス名以外は必要ないです.\n箇条書きの形式は以下のようにしてください\nサービス名 hoge\nサービス名 hoge,"
 
 hideComponents();
 askGpt();
+askSimilarService();
 
 function getParam(name, url) {
     if (!url) url = window.location.href;
@@ -40,8 +44,8 @@ async function askGpt() {
               "content": prefixPrompt + searchedClue 
             }
           ],
-          "temperature": 0.3,
-          "max_tokens": 2000
+          "temperature": 0.1,
+          "max_tokens": 1000
         })
       })
       .then(response=>{
@@ -65,6 +69,40 @@ async function askGpt() {
         console.log(error)
       })
 }
+
+async function askSimilarService() {
+  console.log('Ask gpt!')
+  fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": config.apikey
+      },
+      body: JSON.stringify({
+        "model": "gpt-3.5-turbo",
+        "messages": [ 
+          {
+            "role": "user",
+            "content":  prefixPrompt_similar_service + url 
+          }
+        ],
+        "temperature": 0.1,
+        "max_tokens": 1000
+      })
+    })
+    .then(response=>{
+      return response.json()
+    }).then(data =>{
+      console.log(data)
+      const input = data.choices[0].message.content
+      const serviceNames = input.match(/サービス名: (\w+)/g).map(match => match.split(": ")[1])
+      console.log(serviceNames)
+      showSuggestions(serviceNames)
+    }).catch(error => {
+      console.log(error)
+    })
+}
+
 function hideComponents() {
   $('header').hide();
   $('main').hide();
@@ -72,15 +110,17 @@ function hideComponents() {
 }
 
 function showComponents(result) {
+
   for (let i=0;i<result.length;i++) {
-    $('.cautions').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body"><h2>' + result[i].danger +'<i class="fa-solid fa-plus btn"></i></h2><p class="detail">' + result[i].reason + '</p></article>');
+    $('.cautions').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body click"><h4>' + result[i].danger +'<i class="fa-solid fa-plus btn"></i></h4><h5 class="detail">' + result[i].reason + '</h5></article>');
   }
+
   $('.progress-modal-wrapper').fadeOut();
   $('header').fadeIn();
   $('main').fadeIn();
   $('footer').fadeIn();
 
-  $('article').click(function() {
+  $('.click').click(function() {
     var $detail = $(this).find('.detail');
     if($detail.hasClass('open')) { 
         $detail.removeClass('open');
@@ -102,5 +142,17 @@ function showComponents(result) {
         $(this).find(".btn").addClass('fa-minus');
 
     }
+  });
+
+ 
+}
+
+function showSuggestions(recommends) {
+  for (let i=0;i<recommends.length;i++) {
+    $('.recommends').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body recommend"><h2>' + recommends[i] + '</h2></article>');
+  }
+  $('.recommend').click(function() {
+    var i = $('.recommend').index($(this));
+    window.open("https://www.google.com/search?q=" + recommends[i]);
 });
 }
