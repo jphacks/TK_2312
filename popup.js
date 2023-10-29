@@ -1,14 +1,69 @@
 import{config} from '/apikey.js'
 
-const searchedClue = getParam('data');
+const str = getParam('data');
 const url = getParam('URL');
 
 const prefixPrompt = '以下の利用規約のユーザにとって不利になりうるという観点から危険なところとその理由を箇条書きで抜き出してください．箇条書きの形式では，危険な箇所と理由はセットにしてください. 以下のように\n\n危険な箇所:hoge hoge hoge\n理由: huga huga huga\n以下つづく';
 const prefixPrompt_similar_service = "以下のURLのサービスに類似する他のサービスを調査して、その中の3つのサービス名を箇条書きで生成してください。\nサービス名以外は必要ないです.\n箇条書きの形式は以下のようにしてください\nサービス名 hoge\nサービス名 hoge,";
 
 hideComponents();
-askGpt();
+
+const length = 1500;
+const arrays = splitJapaneseText(str, length);
+const promises = [];
+for(const item of arrays){
+  promises.push(askGpt(item))
+}
+Promise.all(promises)
+  .then(datum => {
+    console.log(datum)
+    hideComponents();
+    return datum;
+  })
+  .then(data =>{
+    const result = [];
+    for (let i = 0;i<arrays.length;i++) {
+      console.log(data[i])
+      const str = data[i].choices[0].message.content;
+      const sections = str.split('\n\n');
+      sections.forEach(section => {
+      const lines = section.split('\n');
+      if (lines.length >= 2) {
+        const danger = lines[0].replace('危険な箇所: ', '');
+        const reason = lines[1].replace('理由: ', '');
+        result.push({ danger, reason });
+       } 
+      });
+    }
+    showComponents(result)
+  })
+
 askSimilarService();
+
+function splitJapaneseText(text, maxLength) {
+  if (typeof text !== 'string' || text.length <= maxLength) {
+    return [text]; // 文字列が指定の長さ以下の場合、そのまま返す
+  }
+
+  const sentences = text.split('。'); // 文章ごとに分割
+  let currentChunk = ''; // 現在のチャンク
+  const chunks = [];
+
+  for (const sentence of sentences) {
+    if (currentChunk.length + sentence.length <= maxLength) {
+      currentChunk += sentence + '。';
+    } else {
+      chunks.push(currentChunk);
+      currentChunk = sentence + '。';
+    }
+  }
+
+  if (currentChunk) {
+    chunks.push(currentChunk);
+  }
+
+  return chunks;
+}
 
 function getParam(name, url) {
     if (!url) url = window.location.href;
@@ -20,8 +75,9 @@ function getParam(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-async function askGpt() {
-    fetch("https://api.openai.com/v1/chat/completions", {
+async function askGpt(searchedClue) {
+  console.log("askGpt")
+    return fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -36,24 +92,16 @@ async function askGpt() {
             }
           ],
           "temperature": 0.1,
-          "max_tokens": 1000
+          "max_tokens": 700
         })
       })
       .then(response=>{
-        return response.json()
-      }).then(data =>{
-        const str = data.choices[0].message.content;
-        const sections = str.split('\n\n');
-        const result = [];
-        sections.forEach(section => {
-        const lines = section.split('\n');
-        if (lines.length >= 2) {
-          const danger = lines[0].replace('危険な箇所: ', '');
-          const reason = lines[1].replace('理由: ', '');
-          result.push({ danger, reason });
-         } 
-        });
-        showComponents(result)
+        if(response.ok){
+          console.log("response is ok")
+          return response.json()
+        } else {
+          console.log(response)
+        }
       }).catch(error => {
         console.log(error);
       })
