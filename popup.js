@@ -8,8 +8,8 @@ const searchedClue = getParam('data')
 const url = getParam('URL')
 console.log(url)
 
-const prefixPrompt = '以下の利用規約のプライバシーの面から危険なところとその理由を箇条書きで抜き出してください．箇条書きの形式では，危険な箇所と理由はセットにしてください．以下のように\n\n危険な箇所:hoge hoge hoge\n理由: huga huga huga\n以下つづく'
-const prefixPrompt_similar_service = "以下のサービスのリンクに類似する他のサービスを調査して、その中のいくつかのサービス名を箇条書きで生成してください。\nサービス名以外は必要ないです.\n箇条書きの形式は以下のようにしてください\nサービス名 hoge\nサービス名 hoge,"
+const prefixPrompt = '以下の利用規約のユーザにとって不利になりうるという観点から危険なところとその理由を箇条書きで抜き出してください．箇条書きの形式では，危険な箇所と理由はセットにしてください. 以下のように\n\n危険な箇所:hoge hoge hoge\n理由: huga huga huga\n以下つづく'
+const prefixPrompt_similar_service = "以下のURLのサービスに類似する他のサービスを調査して、その中の3つのサービス名を箇条書きで生成してください。\nサービス名以外は必要ないです.\n箇条書きの形式は以下のようにしてください\nサービス名 hoge\nサービス名 hoge,"
 
 hideComponents();
 askGpt();
@@ -44,8 +44,8 @@ async function askGpt() {
               "content": prefixPrompt + searchedClue 
             }
           ],
-          "temperature": 0.3,
-          "max_tokens": 2000
+          "temperature": 0.1,
+          "max_tokens": 1000
         })
       })
       .then(response=>{
@@ -86,8 +86,8 @@ async function askSimilarService() {
             "content":  prefixPrompt_similar_service + url 
           }
         ],
-        "temperature": 0.3,
-        "max_tokens": 2000
+        "temperature": 0.1,
+        "max_tokens": 1000
       })
     })
     .then(response=>{
@@ -112,7 +112,7 @@ function hideComponents() {
 function showComponents(result) {
 
   for (let i=0;i<result.length;i++) {
-    $('.cautions').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body click"><h2>' + result[i].danger +'<i class="fa-solid fa-plus btn"></i></h2><h3 class="detail">' + result[i].reason + '</h3></article>');
+    $('.cautions').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body click"><h4>' + result[i].danger +'<i class="fa-solid fa-plus btn"></i></h4><h5 class="detail">' + result[i].reason + '</h5></article>');
   }
 
   $('.progress-modal-wrapper').fadeOut();
