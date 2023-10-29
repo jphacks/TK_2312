@@ -50,5 +50,5 @@ https://github.com/jphacks/TK_2312/assets/93107062/787046ef-7344-4d80-889f-77cb9
 * jQuery
 * HTML
 * UIKit
-* css
+* CSS
 
