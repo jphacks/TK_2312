@@ -108,15 +108,21 @@ function hideComponents() {
 }
 
 function showComponents(result) {
+  const recommends = ["twitter", "instagram", "youtube"];
+
   for (let i=0;i<result.length;i++) {
-    $('.cautions').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body"><h2>' + result[i].danger +'<i class="fa-solid fa-plus btn"></i></h2><p class="detail">' + result[i].reason + '</p></article>');
+    $('.cautions').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body click"><h2>' + result[i].danger +'<i class="fa-solid fa-plus btn"></i></h2><h3 class="detail">' + result[i].reason + '</h3></article>');
   }
+  for (let i=0;i<recommends.length;i++) {
+    $('.recommends').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body recommend"><h2>' + recommends[i] + '</h2></article>');
+  }
+
   $('.progress-modal-wrapper').fadeOut();
   $('header').fadeIn();
   $('main').fadeIn();
   $('footer').fadeIn();
 
-  $('article').click(function() {
+  $('.click').click(function() {
     var $detail = $(this).find('.detail');
     if($detail.hasClass('open')) { 
         $detail.removeClass('open');
@@ -138,5 +144,10 @@ function showComponents(result) {
         $(this).find(".btn").addClass('fa-minus');
 
     }
-});
+  });
+
+  $('.recommend').click(function() {
+      var i = $('.recommend').index($(this));
+      window.open("https://www.google.com/search?q=" + recommends[i]);
+  });
 }
