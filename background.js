@@ -1,4 +1,3 @@
-
 chrome.runtime.onInstalled.addListener(async () => {
   chrome.contextMenus.create({
     id: "analyze",
@@ -14,7 +13,7 @@ chrome.contextMenus.onClicked.addListener(async(info, tab) => {
   const text = info.selectionText;
   const url = await getURL();
   chrome.windows.create({
-    url: chrome.runtime.getURL(`popup.html?data=${text}&URL=${url}`),
+    url: chrome.runtime.getURL(`app.html?data=${text}&URL=${url}`),
     type: "popup"
   }, function(newWindow) {
     chrome.windows.update(newWindow.id, {

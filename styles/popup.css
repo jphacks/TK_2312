@@ -1,0 +1,83 @@
+body {
+    width: 200px;
+    height: auto;
+    background-color: white;
+}
+
+.second, .third {
+    display: none;
+}
+
+.icon {
+    width: 180px;
+    height: 30px;
+    margin: 10px auto;
+    border-radius: 15px;
+    background-color: #6ECBDF;
+}
+
+.icon img {
+    width: 26px;
+    height: 26px;
+    padding-top: 2px;
+    padding-left: 30px;
+    float: left;
+}
+
+.icon h1 {
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 30px;
+    text-align: left;
+}
+
+.discription {
+    margin: 10px auto;
+    text-align: center;
+}
+
+.discription p {
+    color: black;
+    font-size: 13px;
+}
+
+.btn {
+    width: 72px;
+    height: 45px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}
+
+.start {
+    background-color: #33C54A;
+}
+
+.btn p {
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding-top: 13px;
+}
+
+.start p {
+    padding-top: 5px;
+}
+
+.ok {
+    float: left;
+    background-color: blue;
+    margin-left: 20px;
+}
+
+.cancel {
+    float: left;
+    background-color: red;
+    margin-left: 20px;
+}
+
+.close {
+    background-color: darkgray;
+}
