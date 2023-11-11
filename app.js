@@ -3,9 +3,7 @@ import{config} from '/apikey.js'
 const str = getParam('data');
 const url = getParam('URL');
 
-console.log(str);
-
-const prefixPrompt = '以下の利用規約のユーザにとって不利になりうるという観点から危険なところとその理由を箇条書きで抜き出してください．箇条書きの形式では，危険な箇所と理由はセットにしてください. 以下のように\n\n危険な箇所:hoge hoge hoge\n理由: huga huga huga\n以下つづく';
+const prefixPrompt = 'サービスを利用する際には多くの場合利用規約に同意することが求められますが、人々は利用規約をよく読まずに同意しています。その行為には、利用規約に書かれた利用者にとって不利な条項にも同意してしまうという潜在的な危険性をはらんでいます。あなたは人々をそのような危険から守る有能なアシスタントです。利用規約から危険性を孕む条項を抜き出し、それが何条何項か、その危険性の要約、その危険性の詳細を私に教えて下さい。もちろんそのような危険のない利用規約もありますので、その場合には何も返さなくていいです。本当に危険だと思うものだけ教えて下さい。';
 const prefixPrompt_similar_service = "以下のURLのサービスに類似する他のサービスを調査して、その中の3つのサービス名を箇条書きで生成してください。\nサービス名以外は必要ないです.\n箇条書きの形式は以下のようにしてください\nサービス名 hoge\nサービス名 hoge,";
 
 hideComponents();
@@ -14,29 +12,32 @@ const length = 1500;
 const arrays = splitJapaneseText(str, length);
 const promises = [];
 for(const item of arrays){
-  promises.push(askGpt(item))
+  promises.push(askGpt(item));
 }
 Promise.all(promises)
   .then(datum => {
-    console.log(datum)
+    console.log(datum);
     hideComponents();
     return datum;
   })
   .then(data =>{
     const result = [];
     for (let i = 0;i<arrays.length;i++) {
-      console.log(data[i])
-      const str = data[i].choices[0].message.content;
-      const sections = str.split('\n\n');
-      sections.forEach(section => {
-      const lines = section.split('\n');
-      if (lines.length >= 2) {
-        const danger = lines[0].replace('危険な箇所: ', '');
-        const reason = lines[1].replace('理由: ', '');
-        result.push({ danger, reason });
-       } 
-      });
+      console.log(data[i].choices[0].message.content);
+      const str = JSON.parse(data[i].choices[0].message.content);
+      const seq = [];
+      for (var ii in str) {
+        seq.push(str[ii]);
+      }
+      console.log(seq);
+      for (var iii = 0; iii < seq.length; iii += 2) {
+        result.push({
+          "danger":seq[iii],
+          "reason":seq[iii+1]
+        });
+      }
     }
+    console.log(result);
     showComponents(result)
   })
 
@@ -86,15 +87,24 @@ async function askGpt(searchedClue) {
           "authorization": config.apikey
         },
         body: JSON.stringify({
-          "model": "gpt-3.5-turbo",
+          "model": "gpt-3.5-turbo-1106",
           "messages": [ 
             {
+              "role": "system",
+              "content": prefixPrompt
+            },
+            {
               "role": "user",
-              "content": prefixPrompt + searchedClue 
+              "content": "JSON形式で返答してください。以下が利用規約です。" 
+            },
+            {
+              "role": "user",
+              "content": searchedClue 
             }
           ],
           "temperature": 0.1,
-          "max_tokens": 700
+          "max_tokens": 700,
+          "response_format": {"type": "json_object"}
         })
       })
       .then(response=>{
@@ -117,15 +127,24 @@ async function askSimilarService() {
         "authorization": config.apikey
       },
       body: JSON.stringify({
-        "model": "gpt-3.5-turbo",
+        "model": "gpt-3.5-turbo-1106",
         "messages": [ 
+          {
+              "role": "system",
+              "content": "人々は、利用しようとしたサービスが危険を伴うせいでそのサービスを利用するかよく悩みます。あなたはそのような人々に、彼らが利用しようとしていたサービスに類似する別のサービスを提示することで助ける有能なアシスタントです。受信するサービス名からそれに類似するものを私に教えて下さい。"
+          },
+          {
+            "role": "user",
+            "content": "JSON形式で返答してください。" 
+          },
           {
             "role": "user",
             "content":  prefixPrompt_similar_service + url 
           }
         ],
         "temperature": 0.1,
-        "max_tokens": 1000
+        "max_tokens": 1000,
+        "response_format": {"type": "json_object"}
       })
     })
     .then(response=>{
