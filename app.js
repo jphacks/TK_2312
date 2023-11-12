@@ -3,8 +3,6 @@ import{config} from '/apikey.js'
 const str = getParam('data');
 const url = getParam('URL');
 
-console.log(str);
-
 const prefixPrompt = '以下の利用規約のユーザにとって不利になりうるという観点から危険なところとその理由を箇条書きで抜き出してください．箇条書きの形式では，危険な箇所と理由はセットにしてください. 以下のように\n\n危険な箇所:hoge hoge hoge\n理由: huga huga huga\n以下つづく';
 const prefixPrompt_similar_service = "以下のURLのサービスに類似する他のサービスを調査して、その中の3つのサービス名を箇条書きで生成してください。\nサービス名以外は必要ないです.\n箇条書きの形式は以下のようにしてください\nサービス名 hoge\nサービス名 hoge,";
 
@@ -149,7 +147,7 @@ function hideComponents() {
 function showComponents(result) {
 
   for (let i=0;i<result.length;i++) {
-    $('.cautions').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body click"><h4>' + result[i].danger +'<i class="fa-solid fa-plus btn"></i></h4><h5 class="detail">' + result[i].reason + '</h5></article>');
+    $('.cautions').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body click"><h4>' + result[i].danger +'<i class="fa-solid fa-plus btn"></i></h4><h5 class="detail gray">第何条第何項</h5><h5 class="detail">' + result[i].reason + '</h5></article>');
   }
 
   $('.progress-modal-wrapper').fadeOut();

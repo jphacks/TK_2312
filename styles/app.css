@@ -2,6 +2,10 @@
     background-color: crimson;
 }
 
+.gray {
+    background-color: lightgray;
+}
+
 .btn {
     float: right;
     color:#3b82f6;
