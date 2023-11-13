@@ -3,8 +3,19 @@ import{config} from '/apikey.js'
 const str = getParam('data');
 const url = getParam('URL');
 
-const prefixPrompt = 'サービスを利用する際には多くの場合利用規約に同意することが求められますが、人々は利用規約をよく読まずに同意しています。その行為には、利用規約に書かれた利用者にとって不利な条項にも同意してしまうという潜在的な危険性をはらんでいます。あなたは人々をそのような危険から守る有能なアシスタントです。利用規約から危険性を孕む条項を抜き出し、それが何条何項か、その危険性の要約、その危険性の詳細を私に教えて下さい。もちろんそのような危険のない利用規約もありますので、その場合には何も返さなくていいです。本当に危険だと思うものだけ教えて下さい。';
-const prefixPrompt_similar_service = "以下のURLのサービスに類似する他のサービスを調査して、その中の3つのサービス名を箇条書きで生成してください。\nサービス名以外は必要ないです.\n箇条書きの形式は以下のようにしてください\nサービス名 hoge\nサービス名 hoge,";
+const prefixPrompt = 'サービスを利用する際には多くの場合利用規約に同意することが求められますが、人々は利用規約をよく読まずに同意しています。\
+その行為には、利用規約に書かれた利用者にとって不利な条項にも同意してしまうという潜在的な危険性をはらんでいます。あなたは人々をそのような危険から守る有能なアシスタントです。\
+出力例は以下のルールのようにしてください. また,hoge,hugaは例なので実際には出力しないでください.\
+# ルール \
+- dangerには実際の利用規約から抜き出してきた文章が入ります \
+- reasonにはその利用規約が危険である理由の文章が入ります.リッチに出力してください. \
+- 全てJSONファイルで出力してください \
+#出力例は以下のようになります \
+{"danger": "hoge", "reason" "huga"};'
+const prefixPrompt_similar_service = '次のURLのサービスに類似する他のサービスを調査して、その中の3つのサービス名をJSONで生成してください。\
+出力例は以下のようになります\
+{"title": "hoge", "title" "huga"};';
+const system_prompt_asksimilarservice = "a"
 
 hideComponents();
 
@@ -37,7 +48,6 @@ Promise.all(promises)
         });
       }
     }
-    console.log(result);
     showComponents(result)
   })
 
@@ -135,7 +145,7 @@ async function askSimilarService() {
           },
           {
             "role": "user",
-            "content": "JSON形式で返答してください。" 
+            "content": "JSON形式の配列で返答してください。" 
           },
           {
             "role": "user",
@@ -148,12 +158,15 @@ async function askSimilarService() {
       })
     })
     .then(response=>{
-      return response.json()
-    }).then(data =>{
-      const input = data.choices[0].message.content
-      const serviceNames = input.match(/サービス名: (\w+)/g).map(match => match.split(": ")[1])
-      console.log(serviceNames)
-      showSuggestions(serviceNames)
+      if(response.ok){
+        console.log("response is ok")
+        console.log(response)
+        showSuggestions(response)
+        return response.json()
+      } else {
+        console.log("response is not ok")
+        console.log(response.json())
+      }
     }).catch(error => {
       console.log(error);
     })
@@ -196,12 +209,15 @@ function showComponents(result) {
  
 }
 
-function showSuggestions(recommends) {
-  for (let i=0;i<recommends.length;i++) {
-    $('.recommends').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body recommend"><h2>' + recommends[i] + '</h2></article>');
+function showSuggestions(recommendsJSON) {
+  const recommends = JSON.parse(recommendsJSON);
+
+  for (let i = 0; i < recommends.length; i++) {
+    $('.recommends').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body recommend"><h2>' + recommends[i].title + '</h2></article>');
   }
+
   $('.recommend').click(function() {
     const i = $('.recommend').index($(this));
-    window.open("https://www.google.com/search?q=" + recommends[i]);
-});
+    window.open("https://www.google.com/search?q=" + recommends[i].title);
+  });
 }
