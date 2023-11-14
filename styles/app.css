@@ -1,18 +1,90 @@
-.red {
-    background-color: crimson;
+body {
+    background-color: lemonchiffon;
+}
+
+.en {
+    display: none;
+}
+
+header {
+    padding: 20px 0;
+    text-align: center;
+    background-color: bisque;
+}
+
+header h1 {
+    font-family: MS PGothic;
+    font-size: 80px;
+    color: red;
+}
+
+header .en h1 {
+    font-size: 65px;
+}
+
+main {
+    text-align: center;
+}
+
+.clauses {
+    margin: 50px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 20px;
+    text-align: left;
+}
+
+.clauses h1 {
+    padding-left: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #d1d5db;
+    font-family: MS PGothic;
+}
+
+.click {
+    border: 1px solid gainsboro;
+    margin-bottom: 10px;
+}
+
+.click h4 {
+    padding-left: 20px;
+    height: 50px;
+    line-height: 70px;
+}
+
+.click i {
+    line-height: 70px;
+    padding-right: 20px;
+}
+
+.click:hover {
+    background-color: cornsilk;
+}
+
+.detail {
+    display: none;
+    padding: 10px 20px;
+    margin: 0;
+    font-size: 17px;
+    font-family: MS Mincho;
+}
+
+.services {
+    margin: 0 70px;
+}
+
+.services h1 {
+    text-align: left;
 }
 
 .gray {
-    background-color: lightgray;
+    color: darkslateblue;
+    font-weight: bold;
 }
 
 .btn {
     float: right;
     color:#3b82f6;
-}
-
-article h5 {
-    display: none;
 }
 
 .progress-modal-wrapper {
@@ -62,18 +134,51 @@ article h5 {
     }
 }
 
-.antiquewhite {
-    background-color: antiquewhite;
+.services {
+    border-top: 3px solid #d1d5db;
+    padding-top: 20px;
 }
 
-.recommends article:hover {
+.services h1 {
+    font-family: MS PGothic;
+}
+
+.recommend:hover {
     background-color: aqua;
 }
 
-article h1 {
+.recommend {
+    height: 70px;
+    padding: 0 10px;
+    text-align: center;
+    border-radius: 35px;
     font-weight: bold;
+    float: left;
+    margin-right: 30px;
+    background-color: palegoldenrod;
+    margin-bottom: 30px;
 }
 
-article {
+.recommend h2 {
+    line-height: 70px;
+}
+
+.clear {
+    clear: both;
+}
+
+.langchange {
+    float: right;
+    padding: 2px;
+    height: 46px;
+    background-color: darkgray;
     text-align: center;
+    font-weight: bold;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+footer h3 {
+    font-size: 20px;
 }

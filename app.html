@@ -4,6 +4,7 @@
   <head>
     <meta charset="UTF-8">
     <title>"Analyze Terms of Service" Extention</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- CSS -->
     <link rel="stylesheet" href="styles/destyle.css">
@@ -26,37 +27,57 @@
       </div>
     </div>
 
-    <header class="" uk-grid>
-      <div class="red uk-card uk-card-secondary uk-card-body uk-width-expand@*">
-        <h1 class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right
-        uk-text-center uk-width-expand@
-        uk-heading-large ">
-        <i class="fa-solid fa-triangle-exclamation"></i>CAUTION<i class="fa-solid fa-triangle-exclamation"></i>
+    <header>
+      <div class="ja">
+        <h1>
+          <i class="fa-solid fa-triangle-exclamation"></i>警告<i class="fa-solid fa-triangle-exclamation"></i>
         </h1>
+        <div class="langchange jatoen">
+          <h2>English</h2>
+        </div>
+      </div>
+      <div class="en">
+        <h1>
+          <i class="fa-solid fa-triangle-exclamation"></i>WARNING<i class="fa-solid fa-triangle-exclamation"></i>
+        </h1>
+        <div class="langchange entoja">
+          <h2>日本語</h2>
+        </div>
       </div>
     </header>
   
-    <main class="red uk-background-muted uk-grid-match uk-grid-small uk-grid-divider
-    uk-margin-remove-top">
-      <articles class="uk-width-expand@s uk-width-expand@m">
-        <article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body antiquewhite">
-          <h1>dangerous points</h1>
-          <div class="cautions">
-          </div>
-        </article>
-      </articles>
-      <articles class="uk-width-expand@s uk-width-expand@m">
-        <article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body antiquewhite">
-          <h1>recommend...</h1>
-          <div class="recommends uk-child-width-expand@s uk-text-center" uk-grid>
-          </div>
-        </article>
-      </articles>
+    <main>
+      <div class="ja">
+        <div class="clauses">
+          <h1>あなたに不利益をもたらす恐れがある内容</h1>
+          <div class="cautions"></div>
+        </div>
+        <div class="services">
+          <h1>類似サービス</h1>
+          <div class="recommends"></div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      <div class="en">
+        <div class="clauses">
+          <h1>Dangerous Clauses</h1>
+          <div class="cautions"></div>
+        </div>
+        <div class="services">
+          <h1>Similar Services</h1>
+          <div class="recommends"></div>
+        </div>
+        <div class="clear"></div>
+      </div>
     </main>
   
     <footer class="uk-background-primary" uk-grid>
       <h3 class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right
-        uk-text-center uk-width-expand@">
+        uk-text-center uk-width-expand@ ja">
+        "ATS system"をご利用いただきありがとうございました！
+      </h3>
+      <h3 class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right
+        uk-text-center uk-width-expand@ en">
         Thank you for using our "ATS systems"!
       </h3>
     </footer>
