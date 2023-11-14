@@ -11,10 +11,10 @@ const prefixPrompt = 'サービスを利用する際には多くの場合利用�
 - reasonにはその利用規約が危険である理由の文章が入ります.リッチに出力してください. \
 - 全てJSONファイルで出力してください \
 #出力例は以下のようになります \
-{"danger": "hoge", "reason" "huga"};'
+{"danger": "hoge", "reason": "huga"};';
 const prefixPrompt_similar_service = '次のURLのサービスに類似する他のサービスを調査して、その中の3つのサービス名をJSONで生成してください。\
 出力例は以下のようになります\
-{"title": "hoge", "title" "huga"};';
+{"similarServices": [{"title": "hoge"}, {"title": "huga"}]};';
 const system_prompt_asksimilarservice = "a"
 
 hideComponents();
@@ -119,10 +119,10 @@ async function askGpt(searchedClue) {
       })
       .then(response=>{
         if(response.ok){
-          console.log("response is ok")
-          return response.json()
+          console.log("response is ok");
+          return response.json();
         } else {
-          console.log(response)
+          console.log(response);
         }
       }).catch(error => {
         console.log(error);
@@ -130,7 +130,8 @@ async function askGpt(searchedClue) {
 }
 
 async function askSimilarService() {
-  fetch("https://api.openai.com/v1/chat/completions", {
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -140,8 +141,8 @@ async function askSimilarService() {
         "model": "gpt-3.5-turbo-1106",
         "messages": [ 
           {
-              "role": "system",
-              "content": "人々は、利用しようとしたサービスが危険を伴うせいでそのサービスを利用するかよく悩みます。あなたはそのような人々に、彼らが利用しようとしていたサービスに類似する別のサービスを提示することで助ける有能なアシスタントです。受信するサービス名からそれに類似するものを私に教えて下さい。"
+            "role": "system",
+            "content": "人々は、利用しようとしたサービスが危険を伴うせいでそのサービスを利用するかよく悩みます。あなたはそのような人々に、彼らが利用しようとしていたサービスに類似する別のサービスを提示することで助ける有能なアシスタントです。"
           },
           {
             "role": "user",
@@ -156,20 +157,18 @@ async function askSimilarService() {
         "max_tokens": 1000,
         "response_format": {"type": "json_object"}
       })
-    })
-    .then(response=>{
-      if(response.ok){
-        console.log("response is ok")
-        console.log(response)
-        showSuggestions(response)
-        return response.json()
-      } else {
-        console.log("response is not ok")
-        console.log(response.json())
-      }
-    }).catch(error => {
-      console.log(error);
-    })
+    });
+    if(response.ok){
+      const data = await response.json();
+      console.log("response is ok");
+      console.log(data);
+      await showSuggestions(data);
+    } else {
+      console.log("response is not ok");
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 function hideComponents() {
@@ -210,14 +209,14 @@ function showComponents(result) {
 }
 
 function showSuggestions(recommendsJSON) {
-  const recommends = JSON.parse(recommendsJSON);
+  const recommends = JSON.parse(recommendsJSON.choices[0].message.content);
 
-  for (let i = 0; i < recommends.length; i++) {
-    $('.recommends').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body recommend"><h2>' + recommends[i].title + '</h2></article>');
+  for (var i in recommends.similarServices) {
+    $('.recommends').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body recommend"><h2>' + recommends.similarServices[i].title + '</h2></article>');
   }
 
   $('.recommend').click(function() {
-    const i = $('.recommend').index($(this));
-    window.open("https://www.google.com/search?q=" + recommends[i].title);
+    const ind = $('.recommend').index($(this));
+    window.open("https://www.google.com/search?q=" + recommends.similarServices[ind].title);
   });
 }
