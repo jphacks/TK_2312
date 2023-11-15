@@ -3,12 +3,33 @@ import{config} from '/apikey.js'
 const str = getParam('data');
 const url = getParam('URL');
 
-console.log(str);
-
 const prefixPrompt = '以下の利用規約のユーザにとって不利になりうるという観点から危険なところとその理由を箇条書きで抜き出してください．箇条書きの形式では，危険な箇所と理由はセットにしてください. 以下のように\n\n危険な箇所:hoge hoge hoge\n理由: huga huga huga\n以下つづく';
 const prefixPrompt_similar_service = "以下のURLのサービスに類似する他のサービスを調査して、その中の3つのサービス名を箇条書きで生成してください。\nサービス名以外は必要ないです.\n箇条書きの形式は以下のようにしてください\nサービス名 hoge\nサービス名 hoge,";
 
 hideComponents();
+
+const example = [
+  {
+    "danger":"危ないよ～",
+    "place":"1条1項",
+    "reason":"危ないね～"
+  },
+  {
+    "danger":"危ないよ～",
+    "place":"1条1項",
+    "reason":"危ないね～"
+  },
+  {
+    "danger":"危ないよ～",
+    "place":"1条1項",
+    "reason":"危ないね～"
+  },
+  {
+    "danger":"危ないよ～",
+    "place":"1条1項",
+    "reason":"危ないね～"
+  },
+];
 
 const length = 1500;
 const arrays = splitJapaneseText(str, length);
@@ -37,7 +58,7 @@ Promise.all(promises)
        } 
       });
     }
-    showComponents(result)
+    showComponents(example);
   })
 
 askSimilarService();
@@ -149,7 +170,7 @@ function hideComponents() {
 function showComponents(result) {
 
   for (let i=0;i<result.length;i++) {
-    $('.cautions').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body click"><h4>' + result[i].danger +'<i class="fa-solid fa-plus btn"></i></h4><h5 class="detail">' + result[i].reason + '</h5></article>');
+    $('.cautions').append('<div class="click"><h4>' + result[i].danger +'<i class="fa-solid fa-plus btn"></i></h4><h5 class="detail gray">' + result[i].place + '</h5><h5 class="detail">' + result[i].reason + '</h5></div>');
   }
 
   $('.progress-modal-wrapper').fadeOut();
@@ -174,12 +195,20 @@ function showComponents(result) {
     }
   });
 
+  $('.jatoen').click(function() {
+    $('.ja').hide();
+    $('.en').show();
+  });
+  $('.entoja').click(function() {
+    $('.en').hide();
+    $('.ja').show();
+  });
  
 }
 
 function showSuggestions(recommends) {
   for (let i=0;i<recommends.length;i++) {
-    $('.recommends').append('<article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body recommend"><h2>' + recommends[i] + '</h2></article>');
+    $('.recommends').append('<div class="recommend"><h2>' + recommends[i] + '</h2></div>');
   }
   $('.recommend').click(function() {
     const i = $('.recommend').index($(this));

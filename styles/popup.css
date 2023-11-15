@@ -1,83 +1,104 @@
 body {
-    width: 200px;
+    width: 240px;
     height: auto;
-    background-color: white;
+    background-color: black;
+    color: white;
+    font-family: monospace;
 }
 
-.second, .third {
+.second, .third, .en {
     display: none;
 }
 
-.icon {
-    width: 180px;
-    height: 30px;
-    margin: 10px auto;
-    border-radius: 15px;
-    background-color: #6ECBDF;
+header {
+    margin: 0 10px;
+    height: 50px;
+    border-bottom: 1px solid gray;
+    padding: 15px 5px;
 }
 
-.icon img {
-    width: 26px;
-    height: 26px;
-    padding-top: 2px;
-    padding-left: 30px;
-    float: left;
-}
-
-.icon h1 {
-    color: black;
-    font-size: 18px;
+.langchange {
+    float: right;
+    padding: 2px;
+    background-color: darkgray;
+    text-align: center;
     font-weight: bold;
-    line-height: 30px;
+    font-size: 13px;
+}
+
+img {
+    width: 20px;
+    height: 20px;
+    float: left;
+    margin-right: 5px;
+}
+
+header h3 {
+    float: left;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
     text-align: left;
+    line-height: 20px;
 }
 
 .discription {
     margin: 10px auto;
+    padding: 10px;
     text-align: center;
+    padding-bottom: 20px;
+}
+
+.discription h1 {
+    font-size: 15px;
+    margin-bottom: 10px;
+    font-family: sans-serif;
+    font-weight: bold;
 }
 
 .discription p {
-    color: black;
     font-size: 13px;
+    font-family: serif;
 }
 
 .btn {
     width: 72px;
-    height: 45px;
     border-radius: 10px;
     text-align: center;
     margin: 0 auto;
     margin-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-family: YuMincho;
 }
 
 .start {
     background-color: #33C54A;
+    width: calc(100% - 20px);
 }
 
 .btn p {
     color: white;
     font-size: 12px;
     font-weight: bold;
-    padding-top: 13px;
-}
-
-.start p {
-    padding-top: 5px;
+    padding: 2px;
 }
 
 .ok {
     float: left;
     background-color: blue;
-    margin-left: 20px;
+    width: calc(50% - 15px);
+    margin-left: 10px;
 }
 
 .cancel {
     float: left;
     background-color: red;
-    margin-left: 20px;
+    width: calc(50% - 15px);
+    margin-left: 10px;
 }
 
 .close {
     background-color: darkgray;
+    width: calc(100% - 20px);
 }
