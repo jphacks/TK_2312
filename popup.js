@@ -3,6 +3,14 @@ main();
 async function main()
 {
 	let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+	$('.jatoen').click(function() {
+		$('.ja').hide();
+		$('.en').show();
+	});
+	$('.entoja').click(function() {
+		$('.en').hide();
+		$('.ja').show();
+	});
 	$('.start').click(function() {
 		$('.first').hide();
 		chrome.scripting.executeScript({
