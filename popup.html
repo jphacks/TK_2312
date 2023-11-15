@@ -1,66 +1,38 @@
-<!doctype html>
-<html lang="jp">
-
-  <head>
-    <meta charset="UTF-8">
-    <title>"Analyze Terms of Service" Extention</title>
-    
-    <!-- CSS -->
-    <link rel="stylesheet" href="styles/destyle.css">
-    <link rel="stylesheet" href="styles/uikit.min.css" />
-    <link rel="stylesheet" href="styles/style.css" />
-
-    <!-- JS -->
-    <script src="styleScript/uikit.min.js"></script>
-    <script src="styleScript/uikit-icons.min.js"></script>
-    <script src="styleScript/jquery-3.5.1.min.js"></script>
-    <script src="popup.js" type="module"></script>
-    <script src="styleScript/c98f0f48a0.js" crossorigin="anonymous"></script>
-  </head>
-
-  <body>
-    <div class="progress-modal-wrapper">
-      <div class="modal">
-        <h1>in progress...</h1>
-        <div class="spinner"></div>
-      </div>
-    </div>
-
-    <header class="" uk-grid>
-      <div class="red uk-card uk-card-secondary uk-card-body uk-width-expand@*">
-        <h1 class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right
-        uk-text-center uk-width-expand@
-        uk-heading-large ">
-        <i class="fa-solid fa-triangle-exclamation"></i>CAUTION<i class="fa-solid fa-triangle-exclamation"></i>
-        </h1>
-      </div>
-    </header>
-  
-    <main class="red uk-background-muted uk-grid-match uk-grid-small uk-grid-divider
-    uk-margin-remove-top">
-      <articles class="uk-width-expand@s uk-width-expand@m">
-        <article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body antiquewhite">
-          <h1>dangerous points</h1>
-          <div class="cautions">
-          </div>
-        </article>
-      </articles>
-      <articles class="uk-width-expand@s uk-width-expand@m">
-        <article class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right uk-card uk-card-default uk-card-body antiquewhite">
-          <h1>recommend...</h1>
-          <div class="recommends uk-child-width-expand@s uk-text-center" uk-grid>
-          </div>
-        </article>
-      </articles>
-    </main>
-  
-    <footer class="uk-background-primary" uk-grid>
-      <h3 class="uk-margin-top uk-margin-bottom uk-margin-left uk-margin-right
-        uk-text-center uk-width-expand@">
-        Thank you for using our "ATS systems"!
-      </h3>
-    </footer>
-
-  </body>
-  
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>extension</title>
+        <link rel="stylesheet" href="styles/destyle.css">
+        <link rel="stylesheet" href="styles/popup.css">
+        <script src="styleScript/jquery-3.5.1.min.js"></script>
+        <script src="popup.js" type="module"></script>
+    </head>
+    <body>
+        <div class="icon">
+            <img src="icons/icon_circle_500.png" />
+            <h1>ATS System</h1>
+        </div>
+        <div class="discription first">
+            <p>“ATS System”へようこそ！<br/>下のボタンを押して、<br/>開始しましょう。</p>
+        </div>
+        <div class="btn start first">
+            <p>利用規約を<br/>読み取る</p>
+        </div>
+        <div class="discription second">
+            <p>利用規約が上手く読み取れていたら「スタート」、そうでなければ「キャンセル」を押して下さい。</p>
+        </div>
+        <div class="btn second ok">
+            <p>スタート</p>
+        </div>
+        <div class="btn second cancel">
+            <p>キャンセル</p>
+        </div>
+        <div class="discription third">
+            <p>申し訳ございません。利用規約を上手く読み取れなかったようなので、ご自身で選択して実行して下さい。</p>
+        </div>
+        <div class="btn third close">
+            <p>分かった</p>
+        </div>
+    </body>
 </html>

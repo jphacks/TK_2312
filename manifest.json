@@ -3,7 +3,7 @@
   "name": "ATS System",
   "version": "1.4",
   "description": "Analyze terms of service.",
-  "permissions": ["activeTab", "contextMenus"],
+  "permissions": ["activeTab", "contextMenus", "scripting"],
   "icons": {
     "16": "icons/icon_16.png",
     "48": "icons/icon_48.png",
@@ -12,6 +12,9 @@
   "background": {
     "service_worker": "background.js",
     "type":"module"
+  },
+  "action":{
+    "default_icon":"icons/icon_16.png",
+    "default_popup":"popup.html"
   }
 }
-
