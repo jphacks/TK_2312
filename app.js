@@ -1,78 +1,61 @@
 import{config} from '/apikey.js'
 
-const str = getParam('data');
+const numberOfData = getParam('i');
+let str = "";
+for (let i = 0; i < numberOfData; i++) {
+  const data = "data" + i;
+  str += getParam(data); 
+}
 const url = getParam('URL');
 
 const prefixPrompt = 'サービスを利用する際には多くの場合利用規約に同意することが求められますが、人々は利用規約をよく読まずに同意しています。\
 その行為には、利用規約に書かれた利用者にとって不利な条項にも同意してしまうという潜在的な危険性をはらんでいます。あなたは人々をそのような危険から守る有能なアシスタントです。\
-出力例は以下のルールのようにしてください. また,hoge,hugaは例なので実際には出力しないでください.\
+出力例は以下のルールのようにしてください. また,hoge,huga,piyo,puniは例なので実際には出力しないでください.\
 # ルール \
-- dangerには実際の利用規約から抜き出してきた文章が入ります \
+- dangerには危険な理由を要約したものが入ります。reasonに説明を入れるので、dangerに入れる内容は簡潔にしてください \
+- placeには抜き出してきた文章が何条の何項、もしくは何番なのかが入ります \
 - reasonにはその利用規約が危険である理由の文章が入ります.リッチに出力してください. \
-- 全てJSONファイルで出力してください \
+- 全て日本語のJSONファイルで出力してください \
+- 危険な箇所がいくつかある場合は危険性の高いものから順に2つまで教えて下さい。 \
+- 本当に人々が知る必要のある箇所だけ教えて下さい。 \
+- 入力には利用規約とは関係のない内容が含まれることがありますが、その部分は分析しないでください。 \
 #出力例は以下のようになります \
-{"danger": "hoge", "reason": "huga"};';
+{"dangerousClauses": [{"danger": "hoge", "place": "第1条第1項", "reason": "huga"}, {"danger": "piyo", "place": "第1条第1項", "reason": "puni"}]}; \
+#危険な箇所が無かった場合の出力例は以下のようになります \
+{"dangerousClauses": []}';
 const prefixPrompt_similar_service = '次のURLのサービスに類似する他のサービスを調査して、その中の3つのサービス名をJSONで生成してください。\
 出力例は以下のようになります\
 {"similarServices": [{"title": "hoge"}, {"title": "huga"}]};';
-const system_prompt_asksimilarservice = "a"
 
 hideComponents();
-
-const example = [
-  {
-    "danger":"危ないよ～",
-    "place":"1条1項",
-    "reason":"危ないね～"
-  },
-  {
-    "danger":"危ないよ～",
-    "place":"1条1項",
-    "reason":"危ないね～"
-  },
-  {
-    "danger":"危ないよ～",
-    "place":"1条1項",
-    "reason":"危ないね～"
-  },
-  {
-    "danger":"危ないよ～",
-    "place":"1条1項",
-    "reason":"危ないね～"
-  },
-];
 
 const length = 1500;
 const arrays = splitJapaneseText(str, length);
 const promises = [];
+
 for(const item of arrays){
   promises.push(askGpt(item));
 }
+
 Promise.all(promises)
-  .then(datum => {
+.then(datum => {
     console.log(datum);
     hideComponents();
     return datum;
-  })
-  .then(data =>{
-    const result = [];
-    for (let i = 0;i<arrays.length;i++) {
+})
+.then(data =>{
+  const result = [];
+  for (let i = 0;i<arrays.length;i++) {
+    if (data[i]) {
       console.log(data[i].choices[0].message.content);
-      const str = JSON.parse(data[i].choices[0].message.content);
-      const seq = [];
-      for (var ii in str) {
-        seq.push(str[ii]);
-      }
-      console.log(seq);
-      for (var iii = 0; iii < seq.length; iii += 2) {
-        result.push({
-          "danger":seq[iii],
-          "reason":seq[iii+1]
-        });
+      const str = JSON.parse(data[i].choices[0].message.content).dangerousClauses;
+      for (let j = 0; j < str.length; j++) {
+        result.push(str[j]);
       }
     }
-    showComponents(example);
-  })
+  }
+  showComponents(result)
+})
 
 askSimilarService();
 
@@ -108,11 +91,12 @@ function getParam(name, url) {
         results = regex.exec(url);
     if (!results) return null;
     if (!results[2]) return '';
+    console.log(name + "isOK");
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
 async function askGpt(searchedClue) {
-  console.log("askGpt")
+  console.log("askGpt");
     return fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -203,7 +187,11 @@ function hideComponents() {
 function showComponents(result) {
 
   for (let i=0;i<result.length;i++) {
-    $('.cautions').append('<div class="click"><h4>' + result[i].danger +'<i class="fa-solid fa-plus btn"></i></h4><h5 class="detail gray">' + result[i].place + '</h5><h5 class="detail">' + result[i].reason + '</h5></div>');
+    $('.cautions').append('<div class="click"><h4>' + result[i].danger +'</h4><div class="i"><i class="fa-solid fa-plus"></i></div><div class="clear"></div><h5 class="detail gray">' + result[i].place + '</h5><h5 class="detail">' + result[i].reason + '</h5></div>');
+  }
+
+  if (result.length == 0) {
+    $('.cautions').append('<h3>検出されませんでした。</h3>');
   }
 
   $('.progress-modal-wrapper').fadeOut();

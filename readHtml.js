@@ -19,8 +19,17 @@ function pickUp()
     }
 	target.css('background-color','deepskyblue');
     target.css('color','white');
-    console.log(target.text());
-    return target.text();
+
+    let returnText = "";
+    target.each(function(index, element) {
+        if (returnText.indexOf($(element).text()) === -1) {
+            returnText += $(element).text();
+        }
+    });
+    returnText = returnText.replace(/\s+/g, '');
+    console.log(returnText);
+
+    return returnText;
 }
 
 /*「新版」：上の「改良」の方が精度は高いが、「改良」が上手くいかないときに上手くいく。
