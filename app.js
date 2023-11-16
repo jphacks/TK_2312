@@ -20,7 +20,7 @@ const prefixPrompt = 'サービスを利用する際には多くの場合利用�
 - 本当に人々が知る必要のある箇所だけ教えて下さい。 \
 - 入力には利用規約とは関係のない内容が含まれることがありますが、その部分は分析しないでください。 \
 #出力例は以下のようになります \
-{"dangerousClauses": [{"danger": "hoge", "place": "第1条第1項", "reason": "huga"}, {"danger": "piyo", "place": "第1条第1項", "reason": "puni"}]}; \
+{"dangerousClauses": [{"danger": "hoge", "place": "第1条第1項", "reason": "huga"}, {"danger": "piyo", "place": "第2条", "reason": "puni"}]}; \
 #危険な箇所が無かった場合の出力例は以下のようになります \
 {"dangerousClauses": []}';
 const prefixPrompt_similar_service = '次のURLのサービスに類似する他のサービスを調査して、その中の3つのサービス名をJSONで生成してください。\

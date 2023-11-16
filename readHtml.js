@@ -27,7 +27,6 @@ function pickUp()
         }
     });
     returnText = returnText.replace(/\s+/g, '');
-    console.log(returnText);
 
     return returnText;
 }
