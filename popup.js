@@ -50,12 +50,9 @@ async function main()
 					},
 					args: [defaultHTML[0].result]
 				});
-				const texts = splitJapaneseText(text[0].result.replace(/%/g,"パーセント"), 5000);
+				console.log(text[0].result.replace(/%/g,"パーセント"));
 				const url = await getURL();
-				let message = "app.html?i=" + texts.length;
-				for (let i = 0; i < texts.length; i++) {
-					message += "&data" + i + "=" + texts[i];
-				}
+				let message = "app.html?data=" + text[0].result.replace(/%/g,"パーセント");
 				message += "&URL=" + url;
 				chrome.windows.create({
 					url: chrome.runtime.getURL(message),
@@ -73,7 +70,7 @@ async function main()
 			});
 		});
 	});
-}
+};
 
 async function getURL() {
 	return new Promise((resolve, reject) => {
@@ -83,29 +80,4 @@ async function getURL() {
 			resolve(currentUrl);
 		});
 	});
-}
-
-function splitJapaneseText(text, maxLength) {
-	if (typeof text !== 'string' || text.length <= maxLength) {
-	  return [text]; // 文字列が指定の長さ以下の場合、そのまま返す
-	}
-  
-	const sentences = text.split('。'); // 文章ごとに分割
-	let currentChunk = ''; // 現在のチャンク
-	const chunks = [];
-  
-	for (const sentence of sentences) {
-	  if (currentChunk.length + sentence.length <= maxLength) {
-		currentChunk += sentence + '。';
-	  } else {
-		chunks.push(currentChunk);
-		currentChunk = sentence + '。';
-	  }
-	}
-  
-	if (currentChunk) {
-	  chunks.push(currentChunk);
-	}
-  
-	return chunks;
-  }
+};
