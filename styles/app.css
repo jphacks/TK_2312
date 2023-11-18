@@ -41,6 +41,11 @@ main {
     font-family: MS PGothic;
 }
 
+.cautions h3 {
+    margin: 0 auto;
+    text-align: center;
+}
+
 .click {
     border: 1px solid gainsboro;
     margin-bottom: 10px;
@@ -48,13 +53,19 @@ main {
 
 .click h4 {
     padding-left: 20px;
-    height: 50px;
-    line-height: 70px;
+    padding-top: 20px;
+    width: 90%;
+    float: left;
 }
 
-.click i {
-    line-height: 70px;
-    padding-right: 20px;
+.click .i {
+    float: right;
+    font-size: 30px;
+    margin: 0 auto;
+    padding-top: 10px;
+    width: 10%;
+    text-align: center;
+    color:#3b82f6;
 }
 
 .click:hover {
@@ -80,11 +91,6 @@ main {
 .gray {
     color: darkslateblue;
     font-weight: bold;
-}
-
-.btn {
-    float: right;
-    color:#3b82f6;
 }
 
 .progress-modal-wrapper {

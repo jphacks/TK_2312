@@ -2,7 +2,7 @@ function pickUp()
 {
     let target = $('iframe').contents().find('body');
     let tf = target.text().replace(/\s+/g, '').replace(/\r?\n/g, '');
-    if (!target.text().match("規約")) {
+    if (!target.text().match(/規約|terms/)) {
         tf = "";
     }
     if (!tf) {
@@ -17,13 +17,29 @@ function pickUp()
         target = $('div:contains("。")');
         tf = target.text().replace(/\s+/g, '').replace(/\r?\n/g, '');
     }
+    if (!tf) {
+        target = $('p:contains("."), ol:has(li:contains("."))').parent();
+        tf = target.text().replace(/\s+/g, '').replace(/\r?\n/g, '');
+    }
+    if (!tf) {
+        target = $('div:contains(".")');
+        tf = target.text().replace(/\s+/g, '').replace(/\r?\n/g, '');
+    }
 	target.css('background-color','deepskyblue');
     target.css('color','white');
-    console.log(target.text());
-    return target.text();
+
+    let returnText = "";
+    target.each(function(index, element) {
+        if (returnText.indexOf($(element).text()) === -1) {
+            returnText += $(element).text();
+        }
+    });
+    returnText = returnText.replace( / +/g , " ").replace(/\r?\n/g, '');
+
+    return returnText;
 }
 
-/*「新版」：上の「改良」の方が精度は高いが、「改良」が上手くいかないときに上手くいく。
+/*上の方が精度は高いが、それが上手くいかないときに上手くいく。
 function pickUp()
 {
     let target = $('iframe').contents().find('body');

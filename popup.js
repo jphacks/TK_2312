@@ -50,9 +50,12 @@ async function main()
 					},
 					args: [defaultHTML[0].result]
 				});
+				console.log(text[0].result.replace(/%/g,"パーセント"));
 				const url = await getURL();
+				let message = "app.html?data=" + text[0].result.replace(/%/g,"パーセント");
+				message += "&URL=" + url;
 				chrome.windows.create({
-					url: chrome.runtime.getURL(`app.html?data=${text[0].result}&URL=${url}`),
+					url: chrome.runtime.getURL(message),
 					type: "popup"
 				}, function(newWindow) {
 					chrome.windows.update(newWindow.id, {
@@ -67,7 +70,7 @@ async function main()
 			});
 		});
 	});
-}
+};
 
 async function getURL() {
 	return new Promise((resolve, reject) => {
@@ -77,4 +80,4 @@ async function getURL() {
 			resolve(currentUrl);
 		});
 	});
-}
+};
